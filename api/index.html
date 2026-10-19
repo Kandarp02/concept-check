@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Concept Check</title>
+  <meta name="description" content="Seven foundational ideas every developer should be able to explain." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>✦</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #0a0b0f;
+      --surface:     #111318;
+      --surface-2:   #181c26;
+      --border:      #1e2233;
+      --text:        #e2e5f0;
+      --muted:       #6b7291;
+      --accent:      #7c6df0;
+      --accent-soft: rgba(124, 109, 240, 0.12);
+      --accent-glow: rgba(124, 109, 240, 0.35);
+      --error-bg:    rgba(239, 68, 68, 0.08);
+      --error-border: rgba(239, 68, 68, 0.3);
+      --error-text:  #f87171;
+      --radius:      12px;
+      --radius-sm:   8px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* ── layout ─────────────────────────────────────────── */
+    .wrapper {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* ── header ─────────────────────────────────────────── */
+    header {
+      padding: 56px 0 48px;
+      text-align: center;
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border: 1px solid rgba(124, 109, 240, 0.25);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 100px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 2.75rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #fff;
+      line-height: 1.2;
+    }
+
+    h1 span {
+      background: linear-gradient(135deg, #a78bfa 0%, #7c6df0 50%, #60a5fa 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* ── divider ─────────────────────────────────────────── */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin-bottom: 40px;
+    }
+
+    /* ── grid ────────────────────────────────────────────── */
+    #ideas-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      padding-bottom: 72px;
+    }
+
+    /* ── card ────────────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 24px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      cursor: default;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--accent);
+      border-radius: 3px 0 0 3px;
+      transform: scaleY(0);
+      transition: transform 0.2s ease;
+      transform-origin: bottom;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(124, 109, 240, 0.4);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(124, 109, 240, 0.1);
+    }
+
+    .card:hover::before {
+      transform: scaleY(1);
+    }
+
+    .card-number {
+      flex-shrink: 0;
+      width: 34px;
+      height: 34px;
+      background: var(--accent-soft);
+      border: 1px solid rgba(124, 109, 240, 0.2);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    .card-title {
+      font-size: 0.9875rem;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    /* ── skeleton ────────────────────────────────────────── */
+    .skeleton-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 24px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .skeleton-num {
+      flex-shrink: 0;
+      width: 34px;
+      height: 34px;
+      border-radius: var(--radius-sm);
+    }
+
+    .skeleton-line {
+      height: 16px;
+      border-radius: 6px;
+      flex: 1;
+    }
+
+    .shimmer {
+      background: linear-gradient(
+        90deg,
+        var(--surface-2) 0%,
+        #232840 50%,
+        var(--surface-2) 100%
+      );
+      background-size: 200% 100%;
+      animation: shimmer 1.4s ease infinite;
+    }
+
+    @keyframes shimmer {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* ── error ───────────────────────────────────────────── */
+    .error-box {
+      background: var(--error-bg);
+      border: 1px solid var(--error-border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      color: var(--error-text);
+      font-size: 0.9rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .error-icon {
+      flex-shrink: 0;
+      font-size: 1.1rem;
+      margin-top: 1px;
+    }
+
+    .error-detail {
+      margin-top: 4px;
+      font-size: 0.8rem;
+      opacity: 0.7;
+      font-family: monospace;
+    }
+
+    /* ── footer ──────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 24px 0;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    /* ── fade-in animation ───────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .card {
+      animation: fadeUp 0.3s ease both;
+    }
+
+    /* ── responsive ──────────────────────────────────────── */
+    @media (max-width: 480px) {
+      header { padding: 36px 0 32px; }
+      .card  { padding: 18px 18px; }
+      .card-title { font-size: 0.9rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrapper">
+    <header>
+      <div class="badge">7 Ideas</div>
+      <h1>Concept <span>Check</span></h1>
+      <p class="subtitle">Foundational questions every developer should be able to answer clearly.</p>
+    </header>
+
+    <div class="divider"></div>
+
+    <main>
+      <section id="ideas-grid" aria-label="Concept ideas" aria-live="polite">
+        <!-- populated by JS -->
+      </section>
+    </main>
+  </div>
+
+  <footer>
+    <div class="wrapper">Concept Check &mdash; skeleton build</div>
+  </footer>
+
+  <script>
+    const grid = document.getElementById('ideas-grid');
+
+    function renderSkeletons(n = 7) {
+      grid.innerHTML = Array.from({ length: n }, (_, i) => `
+        <div class="skeleton-card" aria-hidden="true">
+          <div class="skeleton-num shimmer"></div>
+          <div class="skeleton-line shimmer" style="width:${60 + (i % 3) * 15}%"></div>
+        </div>
+      `).join('');
+    }
+
+    function renderIdeas(ideas) {
+      grid.innerHTML = ideas.map((idea, i) => `
+        <article
+          class="card"
+          id="idea-${idea.id}"
+          style="animation-delay:${i * 45}ms"
+        >
+          <div class="card-number" aria-hidden="true">${String(idea.id).padStart(2, '0')}</div>
+          <p class="card-title">${escapeHtml(idea.title)}</p>
+        </article>
+      `).join('');
+    }
+
+    function renderError(err) {
+      grid.innerHTML = `
+        <div class="error-box" role="alert">
+          <span class="error-icon">⚠</span>
+          <div>
+            <div>Could not load ideas. Check that the API is running.</div>
+            <div class="error-detail">${escapeHtml(String(err))}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    function escapeHtml(str) {
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    async function loadIdeas() {
+      renderSkeletons();
+      try {
+        const res = await fetch('/api/ideas');
+        if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
+        const data = await res.json();
+        renderIdeas(data);
+      } catch (err) {
+        renderError(err);
+      }
+    }
+
+    loadIdeas();
+  </script>
+
+</body>
+</html>

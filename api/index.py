@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse, FileResponse
+from fastapi.responses import JSONResponse, FileResponse, HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 import os
 
@@ -47,14 +47,29 @@ async def ideas():
     return IDEAS
 
 
-# ── root – serve index.html locally ─────────────────────────────────────────
+# ── root – serve index.html ──────────────────────────────────────────────────
+
+def _find_index_html():
+    """Search common locations — works locally and on Vercel."""
+    base = os.path.dirname(os.path.abspath(__file__))
+    candidates = [
+        os.path.join(base, "..", "public", "index.html"),  # local dev
+        os.path.join(base, "..", "index.html"),            # repo root
+        os.path.join(base, "index.html"),                   # same dir
+    ]
+    for p in candidates:
+        if os.path.isfile(p):
+            return p
+    return None
+
 
 @app.get("/")
 async def index():
-    html_path = os.path.join(os.path.dirname(__file__), "..", "public", "index.html")
-    if os.path.exists(html_path):
-        return FileResponse(html_path)
-    return {"detail": "index.html not found"}
+    path = _find_index_html()
+    if path:
+        with open(path, "r", encoding="utf-8") as f:
+            return HTMLResponse(f.read())
+    return JSONResponse(status_code=404, content={"detail": "index.html not found", "searched_from": os.path.dirname(os.path.abspath(__file__))})
 
 
 # ── catch-all (must be last) ─────────────────────────────────────────────────
